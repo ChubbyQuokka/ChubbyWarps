@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net35;net461</TargetFrameworks>
+    <Version>1.0.0.0</Version>
+    <Authors>ChubbyQuokka</Authors>
+    <Company />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>A more complex warps plugin allowing paid warps and player-made request warps.</Description>
+    <Copyright>ChubbyQuokka 2018</Copyright>
+    <PackageProjectUrl>https://github.com/ChubbyQuokka/ChubbyWarps</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/ChubbyQuokka/ChubbyWarps/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>RocketMod Universal Warps</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryType>Package</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Rocket.Core" Version="5.0.0.580" />
+  </ItemGroup>
+
+</Project>
