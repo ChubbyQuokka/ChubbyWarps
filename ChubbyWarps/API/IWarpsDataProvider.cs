@@ -1,4 +1,5 @@
 ﻿using Rocket.API.DependencyInjection;
+using Rocket.API.Plugins;
 
 namespace ChubbyWarps.API
 {
@@ -11,5 +12,7 @@ namespace ChubbyWarps.API
         void Reload();
 
         void Save();
+
+        void Initialize(IPlugin plugin);
     }
 }

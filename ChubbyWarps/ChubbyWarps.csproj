@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net35;net461</TargetFrameworks>
-    <Version>1.0.0.0</Version>
+    <Version>1.0.0</Version>
     <Authors>ChubbyQuokka</Authors>
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

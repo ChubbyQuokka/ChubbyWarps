@@ -1,12 +1,11 @@
 ﻿using System.Numerics;
 using ChubbyWarps.API;
 
-namespace ChubbyWarps.NewFolder
+namespace ChubbyWarps.Data
 {
-    public sealed class PlayerWarp : IWarpType
+    public class BasicWarp : IWarpType
     {
         public string Name { get; set; }
         public Vector3 Position { get; set; }
-        public string Owner { get; set; }
     }
 }

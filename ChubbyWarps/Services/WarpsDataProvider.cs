@@ -1,4 +1,5 @@
-﻿using ChubbyWarps.API;
+﻿using System;
+using ChubbyWarps.API;
 using Rocket.API.Configuration;
 using Rocket.API.Plugins;
 using Rocket.Core.Configuration;
@@ -7,36 +8,43 @@ namespace ChubbyWarps.Services
 {
     public sealed class WarpsDataProvider : IWarpsDataProvider
     {
-        private IPlugin plugin;
-        private readonly IConfiguration configuration;
+        private IPlugin _plugin;
+        private readonly IConfiguration _configuration;
+
+        private bool _isInitialized;
 
         public WarpsDataProvider(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
 
-        internal void Initialize(IPlugin plugin)
+        public void Initialize(IPlugin plugin)
         {
-            this.plugin = plugin;
+            if (_isInitialized)
+                throw new NotSupportedException("WarpsDataProvider is already initialized!");
+
+            _plugin = plugin;
             Load();
+
+            _isInitialized = true;
         }
 
         public void Load()
         {
-            ConfigurationContext context = new ConfigurationContext(plugin, "Data");
-            configuration.Load(context, Data);
-            Data = configuration.Get(Data);
+            var context = new ConfigurationContext(_plugin, "Data");
+            _configuration.Load(context, Data);
+            Data = _configuration.Get(Data);
         }
 
         public void Reload()
         {
-            configuration.Reload();
+            _configuration.Reload();
         }
 
         public void Save()
         {
-            configuration.Set(Data);
-            configuration.Save();
+            _configuration.Set(Data);
+            _configuration.Save();
         }
 
         public WarpsData Data { get; private set; } = new WarpsData();
