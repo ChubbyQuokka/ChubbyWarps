@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ChubbyWarps.API;
+using MoreLinq;
 using Rocket.API.DependencyInjection;
 using Rocket.API.User;
 using Rocket.Core.I18N;
@@ -9,12 +10,10 @@ namespace ChubbyWarps
 {
     public sealed class ChubbyWarps : Plugin
     {
-        public IWarpsDataProvider DataProvider { get; }
-
         public ChubbyWarps(IDependencyContainer container) : base("ChubbyWarps", container)
         {
-            DataProvider = container.Resolve<IWarpsDataProvider>();
-            DataProvider.Initialize(this);
+            var providers = container.ResolveAll<IDataProvider>();
+            providers.ForEach(x => x.Initialize(this));
         }
 
         public override Dictionary<string, string> DefaultTranslations =>

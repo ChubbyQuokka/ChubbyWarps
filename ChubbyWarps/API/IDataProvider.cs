@@ -3,9 +3,14 @@ using Rocket.API.Plugins;
 
 namespace ChubbyWarps.API
 {
-    public interface IWarpsDataProvider : IService
+    public interface IDataProvider<T> : IService, IDataProvider where T : new()
     {
-        WarpsData Data { get; }
+        T Data { get; set; }
+    }
+
+    public interface IDataProvider
+    {
+        string Name { get; }
 
         void Load();
 

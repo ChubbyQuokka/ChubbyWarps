@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using ChubbyWarps.API;
 using ChubbyWarps.Data;
 using ChubbyWarps.Extensions;
+using ChubbyWarps.Services;
 using Rocket.API.Commands;
 using Rocket.API.Player;
 using Rocket.API.Plugins;
@@ -11,11 +13,15 @@ namespace ChubbyWarps.Commands
 {
     public sealed class CommandSetWarp : ICommand
     {
-        private readonly ChubbyWarps _plugin;
+        private readonly IPlugin _plugin;
+        private readonly WarpsDataProvider _dataProvider;
+        private readonly ConfigDataProvider _configProvider;
 
         public CommandSetWarp(IPlugin plugin)
         {
-            _plugin = (ChubbyWarps)plugin;
+            _plugin = plugin;
+            _dataProvider = (WarpsDataProvider) plugin.Container.Resolve<IDataProvider>("data");
+            _configProvider = (ConfigDataProvider) plugin.Container.Resolve<IDataProvider>("config");
         }
 
         public string Name => "SetWarp";
@@ -23,7 +29,15 @@ namespace ChubbyWarps.Commands
         public string Summary => "Sets a warp to your current location";
         public string Description => null;
         public string Syntax => "<name>";
-        public IChildCommand[] ChildCommands => new IChildCommand[0];
+
+        public IChildCommand[] ChildCommands =>
+            new IChildCommand[]
+            {
+                new CommandSetWarpBasic(_plugin, _dataProvider, _configProvider),
+                new CommandSetWarpPay(_plugin, _dataProvider, _configProvider),
+                new CommandSetWarpPlayer(_plugin, _dataProvider, _configProvider),
+            };
+
         public bool SupportsUser(Type user) => typeof(IPlayerUser).IsAssignableFrom(user);
 
         public void Execute(ICommandContext context) => throw new CommandWrongUsageException();
@@ -70,9 +84,16 @@ namespace ChubbyWarps.Commands
 
     public sealed class CommandSetWarpBasic : CommandSetWarpChild
     {
-        public CommandSetWarpBasic(IPlugin plugin) : base(plugin) { }
+        private readonly WarpsDataProvider _dataProvider;
+        private readonly ConfigDataProvider _configProvider;
 
-        private List<PlayerWarpContainer> _warps => Plugin.DataProvider.Data.PlayerWarps;
+        public CommandSetWarpBasic(IPlugin plugin, WarpsDataProvider dataProvider, ConfigDataProvider configProvider) : base(plugin)
+        {
+            _dataProvider = dataProvider;
+            _configProvider = configProvider;
+        }
+
+        private List<PlayerWarpContainer> Warps => _dataProvider.Data.PlayerWarps;
 
         public override string Name => "basic";
         public override string[] Aliases => new string[0];
@@ -87,9 +108,16 @@ namespace ChubbyWarps.Commands
 
     public sealed class CommandSetWarpPlayer : CommandSetWarpChild
     {
-        public CommandSetWarpPlayer(IPlugin plugin) : base(plugin) { }
-        
-        private List<PlayerWarpContainer> _warps => Plugin.DataProvider.Data.PlayerWarps;
+        private readonly WarpsDataProvider _dataProvider;
+        private readonly ConfigDataProvider _configProvider;
+
+        public CommandSetWarpPlayer(IPlugin plugin, WarpsDataProvider dataProvider, ConfigDataProvider configProvider) : base(plugin)
+        {
+            _dataProvider = dataProvider;
+            _configProvider = configProvider;
+        }
+
+        private List<PlayerWarpContainer> Warps => _dataProvider.Data.PlayerWarps;
 
         public override string Name => "player";
         public override string[] Aliases => new string[0];
@@ -104,9 +132,16 @@ namespace ChubbyWarps.Commands
 
     public sealed class CommandSetWarpPay : CommandSetWarpChild
     {
-        public CommandSetWarpPay(IPlugin plugin) : base(plugin) { }
+        private readonly WarpsDataProvider _dataProvider;
+        private readonly ConfigDataProvider _configProvider;
 
-        private List<PayWarpContainer> _warps => Plugin.DataProvider.Data.PayWarps;
+        public CommandSetWarpPay(IPlugin plugin, WarpsDataProvider dataProvider, ConfigDataProvider configProvider) : base(plugin)
+        {
+            _dataProvider = dataProvider;
+            _configProvider = configProvider;
+        }
+
+        private List<PayWarpContainer> Warps => _dataProvider.Data.PayWarps;
 
         public override string Name => "pay";
         public override string[] Aliases => new string[0];
