@@ -8,7 +8,8 @@ namespace ChubbyWarps.Properties
     {
         public void Register(IDependencyContainer container, IDependencyResolver resolver)
         {
-            container.RegisterSingletonType<IDataProvider, WarpsDataProvider>(null, "data");
+            container.RegisterSingletonType<IDataProvider, WarpsDataProvider>("data");
+            container.RegisterSingletonType<IDataProvider, ConfigDataProvider>("config");
         }
     }
 }
